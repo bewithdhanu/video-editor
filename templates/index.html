@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Editor</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Left Panel - Video Selection -->
+        <div class="left-panel">
+            <div class="panel-header">
+                <h1>Video Editor</h1>
+                <p>Select a video to start editing</p>
+            </div>
+            
+            <div id="dropZone" class="video-list-container">
+                <div id="videoList" class="video-list">
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <p>Loading videos...</p>
+                    </div>
+                </div>
+                
+                <div class="upload-instructions">
+                    <p><strong>To add videos:</strong></p>
+                    <p>Drag & drop video files here or place them in the <code>videos/</code> folder and refresh.</p>
+                    <p>Supported formats: MP4, AVI, MOV, MKV, WebM, OGG</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Video Editor -->
+        <div class="right-panel">
+            <div id="noVideoSelected" class="no-video-state">
+                <div class="no-video-icon">🎬</div>
+                <h2>No Video Selected</h2>
+                <p>Choose a video from the left panel to start editing</p>
+            </div>
+
+            <div id="videoEditor" class="video-editor" style="display: none;">
+                <!-- Video Player -->
+                <div class="video-container">
+                    <video id="videoPlayer">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                <!-- Timeline Section -->
+                <div class="timeline-section">
+                    <div class="timeline-header">
+                        <div class="time-info">
+                            <span id="currentTime">00:00</span>
+                            <span class="separator">/</span>
+                            <span id="totalTime">00:00</span>
+                        </div>
+                        <div class="timeline-controls-group">
+                            <div class="playback-speed-controls">
+                                <button id="speedDownBtn" class="control-btn" title="Slower"><i class="fas fa-angle-left"></i></button>
+                                <span id="speedDisplay" class="speed-display">1.0x</span>
+                                <button id="speedUpBtn" class="control-btn" title="Faster"><i class="fas fa-angle-right"></i></button>
+                            </div>
+                            <div class="custom-controls">
+                                <button id="rewind5sBtn" class="control-btn" title="Rewind 5s"><i class="fas fa-fast-backward"></i></button>
+                                <button id="rewind1sBtn" class="control-btn" title="Rewind 1s"><i class="fas fa-backward"></i></button>
+                                <button id="playPauseBtn" class="control-btn" title="Play/Pause"><i class="fas fa-play"></i></button>
+                                <button id="forward1sBtn" class="control-btn" title="Forward 1s"><i class="fas fa-forward"></i></button>
+                                <button id="forward5sBtn" class="control-btn" title="Forward 5s"><i class="fas fa-fast-forward"></i></button>
+                            </div>
+                            <div class="portion-controls">
+                                <button id="startPortionBtn" class="control-btn" title="Start Portion"><i class="fas fa-play-circle"></i> Start</button>
+                                <button id="endPortionBtn" class="control-btn" title="End Portion" disabled><i class="fas fa-stop-circle"></i> End</button>
+                            </div>
+                        </div>
+                        <button id="fullscreenBtn" class="fullscreen-btn" title="Toggle Fullscreen Mode">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="timeline-container">
+                        <canvas id="timeline" width="800" height="60"></canvas>
+                    </div>
+                </div>
+
+                <!-- Portions Table -->
+                <div class="portions-section">
+                    <h3>Selected Portions</h3>
+                    <div class="table-container">
+                        <table id="portionsTable">
+                            <thead>
+                                <tr>
+                                    <th>Index#</th>
+                                    <th>Time Range</th>
+                                    <th>Action</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody id="portionsTableBody">
+                                <tr class="empty-state">
+                                    <td colspan="4">No portions selected</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Processing Section -->
+                <div class="processing-section">
+                    <button id="processBtn" class="process-btn" disabled>
+                        Process Video
+                    </button>
+                    
+                    <div id="processingStatus" class="processing-status" style="display: none;">
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div id="progressFill" class="progress-fill"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span id="progressPercent">0%</span>
+                                <span id="progressStatus">Initializing...</span>
+                            </div>
+                        </div>
+                        <div class="spinner-small"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
