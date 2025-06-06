@@ -29,7 +29,7 @@ A web-based video editing application built with FastAPI and modern frontend tec
 
 1.  **Clone the repository:**
     ```bash
-    git clone [<repository-url>](https://github.com/bewithdhanu/video-editor.git)
+    git clone https://github.com/bewithdhanu/video-editor.git
     cd video-editor
     ```
 
