@@ -143,3 +143,4 @@ temp/
 videos/
 *.sqlite3
 *.log 
+.DS_Store

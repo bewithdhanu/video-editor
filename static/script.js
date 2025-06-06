@@ -156,7 +156,7 @@ class VideoEditor {
 
     // Load video
     this.currentVideo = this.videos.find((v) => v.filename === filename)
-    this.videoPlayer.src = `/videos/${filename}`
+    this.videoPlayer.src = `/videos/${encodeURIComponent(filename)}`
     this.selections = []
 
     // Reset controls

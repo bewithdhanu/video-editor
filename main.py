@@ -90,41 +90,58 @@ async def process_video_segments(task_id: str, video_path: str, segments: List[D
         # Sort segments by start time
         segments.sort(key=lambda x: x['start'])
         
-        # Create segments list including unmodified portions
-        all_segments = []
-        current_time = 0
+        # Build list of segments to include in final video (excluding trimmed portions)
+        keep_segments = []
+        current_pos = 0
         
-        for i, segment in enumerate(segments):
+        # Create a list of time ranges to process
+        time_ranges = []
+        last_end = 0
+        
+        for segment in segments:
             start_time = segment['start']
             end_time = segment['end']
-            action = segment.get('action', 'speed') # Default to 'speed' for backward compatibility
-
-            # This part is a gap, which should be preserved
-            if current_time < start_time:
-                all_segments.append({
-                    'start': current_time,
+            action = segment.get('action', 'speed')
+            
+            # Add any gap before this segment
+            if last_end < start_time:
+                time_ranges.append({
+                    'start': last_end,
                     'end': start_time,
-                    'speed': 1.0
+                    'speed': 1.0,
+                    'action': 'keep'
                 })
             
-            # If the action is 'speed', we include this segment with its speed modification.
-            # If the action is 'trim' (delete), we simply skip it, creating a gap.
-            if action == 'speed':
-                all_segments.append({
+            # Add this segment if it's not trimmed
+            if action != 'trim':
+                time_ranges.append({
                     'start': start_time,
                     'end': end_time,
-                    'speed': segment['speed']
+                    'speed': segment.get('speed', 1.0),
+                    'action': action
                 })
             
-            current_time = end_time
+            last_end = end_time
         
-        # Add final unmodified segment if needed
-        if current_time < total_duration:
-            all_segments.append({
-                'start': current_time,
+        # Add final segment if needed
+        if last_end < total_duration:
+            time_ranges.append({
+                'start': last_end,
                 'end': total_duration,
-                'speed': 1.0
+                'speed': 1.0,
+                'action': 'keep'
             })
+        
+        # Filter out empty segments and trimmed segments, keeping only what we want
+        all_segments = []
+        for segment in time_ranges:
+            if segment['action'] != 'trim' and segment['start'] < segment['end']:
+                all_segments.append(segment)
+        
+        # Debug: Log what segments will be processed
+        logger.info(f"Original segments: {segments}")
+        logger.info(f"Time ranges built: {time_ranges}")
+        logger.info(f"Final segments to process: {all_segments}")
         
         # Process each segment
         temp_files = []
