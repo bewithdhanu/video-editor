@@ -29,7 +29,7 @@ A web-based video editing application built with FastAPI and modern frontend tec
 
 1.  **Clone the repository:**
     ```bash
-    git clone <repository-url>
+    git clone [<repository-url>](https://github.com/bewithdhanu/video-editor.git)
     cd video-editor
     ```
 
@@ -74,7 +74,7 @@ A web-based video editing application built with FastAPI and modern frontend tec
 
 ## Project Structure
 
-\`\`\`
+```
 video-editor/
 ├── main.py                 # FastAPI backend application
 ├── requirements.txt        # Python dependencies
@@ -87,7 +87,7 @@ video-editor/
 ├── videos/                # Source video files (add your videos here)
 ├── processed/             # Output video files
 └── temp/                  # Temporary processing files (auto-cleanup)
-\`\`\`
+```
 
 ## API Endpoints
 
